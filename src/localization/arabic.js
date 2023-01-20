@@ -4,6 +4,6 @@ export default dictionary = {
     'Register': 'تسجيل',
     'ID': 'رمز التعريف',
     'Email': 'بريد الكتروني',
-    'PhoneNumber': 'رقم الهاتف',
+    'PhoneNumber': 'رقم الهاتف' ,
     'DateOfBirth': 'تاريخ الميلاد',
 }
