@@ -5,5 +5,5 @@ export default dictionary = {
     'ID': 'رمز التعريف',
     'Email': 'بريد الكتروني',
     'PhoneNumber': 'رقم الهاتف',
-    'DateOfBirth': 'تاريخ الميلاد'
+    'DateOfBirth': 'تاريخ الميلاد',
 }
