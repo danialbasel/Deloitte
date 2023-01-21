@@ -9,6 +9,7 @@ import { store, persistor } from './redux/configureStore';
 import localize from './localization/localizer';
 import Dashboard from './screens/dashboard';
 import UserInfo from './screens/userInfo';
+import Settings from './screens/settings';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
@@ -30,6 +31,7 @@ function App() {
     }, []);
     const [userInfoTitle, setUserInfoTitle] = useState(localize('UserInfo'));
     const [dashboardTitle, setDashboardTitle] = useState(localize('Dashboard'));
+    const [settingsTitle, setSettingsTitle] = useState(localize('Settings'));
 
     onBeforeLift = () => {
         let lang = store.getState().auth.Language;
@@ -40,6 +42,7 @@ function App() {
         }
         setUserInfoTitle(localize('UserInfo'));
         setDashboardTitle(localize('Dashboard'));
+        setSettingsTitle(localize('Settings'));
     }
     return (
         <Provider store={store}>
@@ -53,6 +56,8 @@ function App() {
                                 iconName = 'table';
                             } else if (route.name === userInfoTitle) {
                                 iconName = 'user';
+                            }else if(route.name === settingsTitle){
+                                iconName = 'cog'
                             }
 
                             // You can return any component that you like here!
@@ -61,6 +66,7 @@ function App() {
                     })}>
                         <Tab.Screen name={dashboardTitle} component={Dashboard} />
                         <Tab.Screen name={userInfoTitle} component={UserInfo} />
+                        <Tab.Screen name={settingsTitle} component={Settings} />
                     </Tab.Navigator>
                 </NavigationContainer>
             </PersistGate>

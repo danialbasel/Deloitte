@@ -1,6 +1,7 @@
+import * as actions from '../actions';
 
 const initialState = {
-    Language: 'ara',
+    Language: 'eng',
     CurrentUser: {
         ID: null,
         Email: null,
@@ -11,13 +12,26 @@ const initialState = {
 
 const auth = (state = initialState, action) => {
     switch (action.type) {
-        case "signIn":
+        case actions.REGISTER_NEW_USER:
             return {
                 ...state,
-                CurrentUser:{
+                CurrentUser: {
                     ...state.CurrentUser,
+                    ID: action.payload.ID,
                     Email: action.payload.Email,
+                    PhoneNumber: action.payload.PhoneNumber,
+                    DateOfBirth: action.payload.DateOfBirth,
                 }
+            }
+        case actions.LOGOUT_CURRENT_USER:
+            return {
+                ...state,
+                CurrentUser: initialState.CurrentUser
+            }
+        case actions.CHANGE_CURRENT_LANGUAGE:
+            return {
+                ...state,
+                Language: action.payload
             }
         default:
             return state;
