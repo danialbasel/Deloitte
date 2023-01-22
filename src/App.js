@@ -56,7 +56,7 @@ function App() {
                                 iconName = 'table';
                             } else if (route.name === userInfoTitle) {
                                 iconName = 'user';
-                            }else if(route.name === settingsTitle){
+                            } else if (route.name === settingsTitle) {
                                 iconName = 'cog'
                             }
 

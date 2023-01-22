@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Dimensions, Button } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { store } from '../redux/configureStore';
 import * as actions from '../redux/actions';
+import localize from '../localization/localizer';
 
 export default function UserInfo() {
-    const fullWidth = Dimensions.get('window').width;
     const [open, setOpen] = useState(false);
     const [userRegistered, setUserRegistered] = useState(false);
     const [isValidID, setIsValidID] = useState(true);
@@ -70,70 +70,47 @@ export default function UserInfo() {
     if (userRegistered) {
         let CurrentUser = store.getState().auth.CurrentUser;
         return (
-            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+            <View style={styles.container}>
                 <View>
-                    <Text style={{ fontSize: 20 }}>{localize('ID')} : {CurrentUser.ID}</Text>
+                    <Text style={styles.infoLabel}>{localize('ID')} : {CurrentUser.ID}</Text>
 
-                    <Text style={{ fontSize: 20 }}>{localize('Email')} : {CurrentUser.Email}</Text>
+                    <Text style={styles.infoLabel}>{localize('Email')} : {CurrentUser.Email}</Text>
 
-                    <Text style={{ fontSize: 20 }}>{localize('PhoneNumber')} : {CurrentUser.PhoneNumber}</Text>
+                    <Text style={styles.infoLabel}>{localize('PhoneNumber')} : {CurrentUser.PhoneNumber}</Text>
 
-                    <Text style={{ fontSize: 20 }}>{localize('DateOfBirth')} : {new Date(CurrentUser.DateOfBirth).toLocaleDateString()}</Text>
+                    <Text style={styles.infoLabel}>{localize('DateOfBirth')} : {new Date(CurrentUser.DateOfBirth).toLocaleDateString()}</Text>
                 </View>
-                <View style={{
-                    marginTop: 40,
-                    height: 40,
-                    width: fullWidth * 0.75,
-                    alignSelf: 'center'
-                }}>
+                <View style={styles.button}>
                     <Button title={localize('LogOut')}
-                        onPress={() => Logout()} color={'#017A0B'} />
+                        onPress={() => Logout()} color={'#4BB543'} />
                 </View>
             </View>
         )
     } else {
         return (
-            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+            <View style={styles.container}>
                 <View>
-                    <Text style={{ fontSize: 20, marginStart: 5 }}>{localize('ID')}</Text>
-                    <TextInput style={[{
-                        height: 40,
-                        margin: 12,
-                        borderWidth: 1,
-                        padding: 10,
-                        width: fullWidth * 0.75,
-                    }, !isValidID ? { borderColor: 'red' } : null]}
+                    <Text style={styles.textInputLabel}>{localize('ID')}</Text>
+                    <TextInput style={[styles.textInput, !isValidID ? styles.invalidInput : null]}
                         placeholder={localize('ID')}
                         value={id}
                         onChangeText={(text) => {
                             setID(text);
                             setIsValidID(true);
                         }}></TextInput>
-                    {!isValidID && <Text style={{ fontSize: 12, marginBottom: 5, color: 'red', marginStart: 12 }}>{localize('Required')}</Text>}
+                    {!isValidID && <Text style={styles.validationMessage}>{localize('Required')}</Text>}
 
-                    <Text style={{ fontSize: 20, marginStart: 5 }}>{localize('Email')}</Text>
-                    <TextInput style={[{
-                        height: 40,
-                        margin: 12,
-                        borderWidth: 1,
-                        padding: 10,
-                        width: fullWidth * 0.75,
-                    }, !isValidEmail ? { borderColor: 'red' } : null]}
+                    <Text style={styles.textInputLabel}>{localize('Email')}</Text>
+                    <TextInput style={[styles.textInput, !isValidEmail ? styles.invalidInput : null]}
                         placeholder={localize('Email')}
                         value={email}
                         onChangeText={(text) => {
                             setEmail(text);
                             setIsValidEmail(true);
                         }}></TextInput>
-                    {!isValidEmail && <Text style={{ fontSize: 12, marginBottom: 5, color: 'red', marginStart: 12 }}>{localize('InvalidEmail')}</Text>}
-                    <Text style={{ fontSize: 20, marginStart: 5 }}>{localize('PhoneNumber')}</Text>
-                    <TextInput style={[{
-                        height: 40,
-                        margin: 12,
-                        borderWidth: 1,
-                        padding: 10,
-                        width: fullWidth * 0.75,
-                    }, !isValidPhoneNumber ? { borderColor: 'red' } : null]}
+                    {!isValidEmail && <Text style={styles.validationMessage}>{localize('InvalidEmail')}</Text>}
+                    <Text style={styles.textInputLabel}>{localize('PhoneNumber')}</Text>
+                    <TextInput style={[styles.textInput, !isValidPhoneNumber ? styles.invalidInput : null]}
                         placeholder={localize('PhoneNumber')}
                         value={phoneNumber}
                         keyboardType={'numeric'}
@@ -141,15 +118,11 @@ export default function UserInfo() {
                             setPhoneNumber(text);
                             setIsValidPhoneNumber(true);
                         }}></TextInput>
-                    {!isValidPhoneNumber && <Text style={{ fontSize: 12, marginBottom: 5, color: 'red', marginStart: 12 }}>{localize('InvalidPhoneNumber')}</Text>}
-                    <Text style={{ fontSize: 20, marginStart: 5 }}>{localize('DateOfBirth')}</Text>
-                    <View style={{
-                        height: 40,
-                        width: fullWidth * 0.75,
-                        margin: 12,
-                    }}>
+                    {!isValidPhoneNumber && <Text style={styles.validationMessage}>{localize('InvalidPhoneNumber')}</Text>}
+                    <Text style={styles.textInputLabel}>{localize('DateOfBirth')}</Text>
+                    <View style={styles.datePicker}>
                         <Button title={dateOfBirth.toLocaleDateString()}
-                            onPress={() => setOpen(true)} color={'#017A0B'} />
+                            onPress={() => setOpen(true)} color={'gray'} />
                     </View>
                     <DatePicker
                         modal
@@ -167,16 +140,51 @@ export default function UserInfo() {
                     />
                 </View>
 
-                <View style={{
-                    marginTop: 40,
-                    height: 40,
-                    width: fullWidth * 0.75,
-                    alignSelf: 'center',
-                }}>
+                <View style={styles.button}>
                     <Button title={localize('Register')}
-                        onPress={() => Register()} color={'#017A0B'} />
+                        onPress={() => Register()} color={'#4BB543'} />
                 </View>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    textInput: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        width: '75%',
+    },
+    invalidInput: {
+        borderColor: 'red',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    textInputLabel: {
+        fontSize: 20,
+        marginStart: 5,
+    },
+    validationMessage: {
+        fontSize: 12,
+        marginBottom: 5,
+        color: 'red',
+        marginStart: 12,
+    },
+    button: {
+        height: 40,
+        width: '75%',
+        alignSelf: 'center',
+    },
+    datePicker: {
+        height: 40,
+        width: '75%',
+        margin: 12,
+    },
+    infoLabel: {
+        fontSize: 20,
+    },
+})

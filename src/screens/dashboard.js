@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TextInput, Button, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, TextInput, Button, RefreshControl, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import localize from '../localization/localizer';
 
 export default function Dashboard() {
     const [fullNews, setFullNews] = useState([]);
@@ -55,29 +56,12 @@ export default function Dashboard() {
     }
 
     return (
-        <ScrollView style={{ flex: 1 }} refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={() => { setIsRefreshing(true) }} />}>
-            <View style={{
-                margin: 8,
-                justifyContent: "flex-start",
-                alignItems: "center",
-                flexDirection: "row",
-                width: "100%",
-            }}>
-                <View style={{
-                    padding: 3,
-                    flexDirection: "row",
-                    width: "95%",
-                    backgroundColor: "#d9dbda",
-                    borderRadius: 15,
-                    alignItems: "center",
-                }}>
-                    <Icon name="search" size={15} color="black" style={{ marginLeft: 1 }} />
+        <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={() => { setIsRefreshing(true) }} />}>
+            <View style={styles.searchContainer}>
+                <View style={styles.searchView}>
+                    <Icon name="search" size={15} color="black" style={styles.searchIcon} />
                     <TextInput
-                        style={{
-                            fontSize: 20,
-                            marginLeft: 10,
-                            width: "90%",
-                        }}
+                        style={styles.searchTextInput}
                         placeholder="Search"
                         value={searchPhrase}
                         onChangeText={SearchNews}
@@ -86,13 +70,13 @@ export default function Dashboard() {
             </View>
             {Object.keys(filteredNews).map((item) => {
                 return (
-                    <View key={item} style={{ flex: 1, margin: 5, borderBottomWidth: 1 }}>
-                        <Text style={{ fontSize: 22, fontWeight: 900, color: 'grey' }}>{item} {localize('WeekAgo')}</Text>
+                    <View key={item} style={styles.groupedArticles}>
+                        <Text style={styles.groupedArticlesLabel}>{item} {localize('WeekAgo')}</Text>
                         {filteredNews[item].map((article, articleIndex) => {
                             return (
-                                <View key={articleIndex + 'articleIndex'} style={{ flex: 1, marginVertical: 5 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 800, color: 'black' }}>{article.title}</Text>
-                                    <Text style={{ fontSize: 12, marginStart: 10 }}>{article.description}</Text>
+                                <View key={articleIndex + 'articleIndex'} style={styles.articleView}>
+                                    <Text style={styles.articleTitle}>{article.title}</Text>
+                                    <Text style={styles.articleDescription}>{article.description}</Text>
                                 </View>
                             )
                         })}
@@ -103,3 +87,55 @@ export default function Dashboard() {
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    searchContainer: {
+        margin: 8,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        flexDirection: "row",
+        width: "100%",
+    },
+    searchView: {
+        padding: 3,
+        flexDirection: "row",
+        width: "95%",
+        backgroundColor: "#D9DBDA",
+        borderRadius: 15,
+        alignItems: "center",
+    },
+    searchIcon: {
+        marginLeft: 1,
+    },
+    searchTextInput: {
+        fontSize: 20,
+        marginLeft: 10,
+        width: "90%",
+    },
+    groupedArticles: {
+        flex: 1,
+        margin: 5,
+        borderBottomWidth: 1,
+    },
+    groupedArticlesLabel: {
+        fontSize: 22,
+        fontWeight: 900,
+        color: 'grey',
+    },
+    articleView: {
+        flex: 1,
+        marginVertical: 5,
+    },
+    articleTitle: {
+        fontSize: 18,
+        fontWeight: 800,
+        color: 'black',
+    },
+    articleDescription: {
+        fontSize: 12,
+        marginStart: 10,
+    },
+})
